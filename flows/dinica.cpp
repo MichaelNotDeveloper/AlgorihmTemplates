@@ -146,18 +146,3 @@ int64_t Dinica::constructMaxFlowWithZomming()
     }
     return maxflow;
 }
-
-int main()
-{
-    int n, m;
-    std::cin >> n >> m;
-    Flow flow(1, n, n);
-    while (m--)
-    {
-        int x, y, z;
-        std::cin >> x >> y >> z;
-        flow.addDirectedEdge(x, y, z);
-    }
-    Dinica dinica(flow);
-    std::cout << dinica.constructMaxFlowWithZomming();
-}
