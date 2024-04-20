@@ -9,9 +9,12 @@ struct edge
 {
     size_t x, y;
     int flow = 0, cap = 1, cost = 0;
+    int info;
     edge(size_t x, size_t y);
     edge(size_t x, size_t y, int cap);
     edge(size_t x, size_t y, int cap, int cost);
+    edge(size_t x, size_t y, int cap, int cost, int info);
+    void setinfo(int custom_info);
 };
 
 class Flow
@@ -24,12 +27,13 @@ public:
     void SetN(size_t n);
     void SetZoom(int zoom);
     int GetZoom();
-    void addDirectedEdge(size_t x, size_t y, int cap, int cost);
-    void addUndirectedEdge(size_t x, size_t y, int cap, int cost);
+    void addEdge(edge e, bool undir);
+    void addDirectedEdge(size_t x, size_t y, int cap, int cost, int info);
+    void addUndirectedEdge(size_t x, size_t y, int cap, int cost, int info);
     bool constructLevelGraph();
     int getDistance();
     int64_t constructBlockingFlow(bool use_dist);
-
+    std::vector<edge> GetEdges();
 private:
     void pushflow(size_t index_of_edge, int flow);
     size_t _source = 0;

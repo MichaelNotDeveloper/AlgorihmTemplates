@@ -3,6 +3,12 @@
 edge::edge(size_t x, size_t y) : x(x), y(y) {}
 edge::edge(size_t x, size_t y, int cap) : x(x), y(y), cap(cap) {}
 edge::edge(size_t x, size_t y, int cap, int cost) : x(x), y(y), cap(cap), cost(cost) {}
+edge::edge(size_t x, size_t y, int cap, int cost, int info) : x(x), y(y), cap(cap), cost(cost), info(info) {}
+
+void edge::setinfo(int custom_info)
+{
+    info = custom_info;
+}
 
 Flow::Flow()
 {
@@ -17,6 +23,7 @@ void Flow::SetDrain(size_t drain)
 {
     _drain = drain;
 }
+
 void Flow::SetSource(size_t source)
 {
     _source = source;
@@ -38,20 +45,31 @@ int Flow::GetZoom()
     return _zoom;
 }
 
-void Flow::addDirectedEdge(size_t x, size_t y, int cap = 1, int cost = 0)
+void Flow::addDirectedEdge(size_t x, size_t y, int cap = 1, int cost = 0, int info = 0)
 {
     _graph[x].push_back(_edges.size());
-    _edges.push_back(edge(x, y, cap, cost));
+    _edges.push_back(edge(x, y, cap, cost, info));
     _graph[y].push_back(_edges.size());
-    _edges.push_back(edge(y, x, 0, cost));
+    _edges.push_back(edge(y, x, 0, cost, info));
 }
 
-void Flow::addUndirectedEdge(size_t x, size_t y, int cap = 1, int cost = 0)
+void Flow::addUndirectedEdge(size_t x, size_t y, int cap = 1, int cost = 0, int info = 0)
 {
     _graph[x].push_back(_edges.size());
-    _edges.push_back(edge(x, y, cap, cost));
+    _edges.push_back(edge(x, y, cap, cost, info));
     _graph[y].push_back(_edges.size());
-    _edges.push_back(edge(y, x, cap, cost));
+    _edges.push_back(edge(y, x, cap, cost, info));
+}
+
+void Flow::addEdge(edge e, bool undir = false) {
+    _graph[e.x].push_back(_edges.size());
+    _edges.push_back(e);
+    _graph[e.y].push_back(_edges.size());
+    std::swap(e.x, e.y);
+    if (!undir) {
+        e.flow = 0;
+    }
+    _edges.push_back(e);
 }
 
 void Flow::pushflow(size_t index_of_edge, int flow)
@@ -101,7 +119,6 @@ int64_t Flow::constructBlockingFlow(bool use_dist = true)
                 int flow = dfs(line.y, std::min(maxflow, line.cap - line.flow));
                 if (flow)
                 {
-                    _edges.pop_back();
                     this->pushflow(_graph[index][ptr[index]], flow);
                     return flow;
                 }
@@ -144,4 +161,9 @@ int64_t Dinica::constructMaxFlowWithZomming()
         flow.SetZoom(flow.GetZoom() >> 1);
     }
     return maxflow;
+}
+
+std::vector<edge> Flow::GetEdges()
+{
+    return _edges;
 }
