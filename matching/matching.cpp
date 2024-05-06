@@ -1,4 +1,3 @@
-
 #include "matching.h"
 
 Khun::Khun(int n, int m) : _n(n), _m(m)
@@ -37,9 +36,9 @@ int Khun::find_matching()
     std::vector<int> order(_n + 1);
     std::iota(std::begin(order), std::end(order), 0);
     std::shuffle(order.begin(), order.end(), g);
-    
+
     int size_of_matching = 0;
-    
+
     for (int vertex : order)
     {
         for (int edge : _bgraph[vertex])
@@ -51,12 +50,12 @@ int Khun::find_matching()
             }
         }
     }
-    
+
     std::shuffle(order.begin(), order.end(), g);
-    
+
     std::vector<int> used(_n + 1, 0);
     int timer = 1;
-    
+
     std::function<bool(int)> dfs = [&](int index) -> bool
     {
         if (used[index] == timer)
@@ -74,7 +73,7 @@ int Khun::find_matching()
         }
         return false;
     };
-    
+
     for (int vertex : order)
     {
         bool result = dfs(vertex);

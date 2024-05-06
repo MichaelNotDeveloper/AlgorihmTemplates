@@ -4,8 +4,9 @@
 #include <algorithm>
 #include <functional>
 
-class Khun {
-    public:
+class Khun
+{
+public:
     Khun(int n, int m);
     void add_edge(int x, int y);
     void add_matching_edge(int x, int y);
@@ -15,7 +16,8 @@ class Khun {
     std::vector<std::vector<int>> decompose();
     std::vector<std::pair<int, int>> decompose_by_edges();
     void shuffle_edges();
-    private:
+
+private:
     int _n;
     int _m;
     std::vector<std::vector<int>> _bgraph;

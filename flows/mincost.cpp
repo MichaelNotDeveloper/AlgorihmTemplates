@@ -60,7 +60,7 @@ int MinCost::find_mincost_basic()
         {
             if (deletion.count(static_cast<int>(i)))
             {
-                deletion_maxflow = min(deletion_maxflow, edges[i].cap - edges[i].flow);
+                deletion_maxflow = std::min(deletion_maxflow, edges[i].cap - edges[i].flow);
             }
         }
         for (size_t i = 0; i < edges.size(); i++)
